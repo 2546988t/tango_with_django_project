@@ -1,14 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-# Import the Category model
-from rango.models import Category
-from rango.models import Page
-from rango.forms import CategoryForm
-from django.shortcuts import redirect
-from rango.forms import PageForm
+from rango.models import Category, Page
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.urls import reverse
-from rango.forms import UserForm, UserProfileForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 def index(request):
@@ -197,3 +192,12 @@ def user_login(request):
 @login_required
 def restricted(request):
     return HttpResponse("Since you're logged in, you can see this text!")
+
+# Use the login_required() decorator to ensure only those logged in can
+# access the view.
+@login_required
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+    # Take the user back to the homepage.
+    return redirect(reverse('rango:index'))
