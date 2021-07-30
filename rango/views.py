@@ -9,6 +9,7 @@ from rango.forms import PageForm
 from django.urls import reverse
 from rango.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     # Query the database for a list of ALL categories currently stored.
@@ -192,3 +193,7 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the blank dictionary object...
         return render(request, 'rango/login.html')
+
+@login_required
+def restricted(request):
+    return HttpResponse("Since you're logged in, you can see this text!")
